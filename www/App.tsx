@@ -1,118 +1,119 @@
-import React, { useEffect, useState } from "https://esm.sh/react@18";
-import { setup, strict, tw } from "https://cdn.skypack.dev/twind";
-import Editor, { loader } from "https://esm.sh/@monaco-editor/react";
-import { invoke } from "https://esm.sh/@tauri-apps/api/tauri";
-import OneDarkTheme from "./public/theme.json" assert { type: "json" };
-import { editor } from "https://esm.sh/v117/monaco-editor@0.37.1/esm/vs/editor/editor.api";
-import { useDebounce } from "https://esm.sh/react-use";
-
-setup({
-  mode: strict,
-  hash: true,
-  theme: {
-    extend: {
-      colors: {
-        background: "#282c34",
-        border: "#3e4452",
-      },
-    },
-  },
-});
+import Editor from "./components/Editor.tsx";
+import {
+  css,
+  Panel,
+  PanelGroup,
+  PanelResizeHandle,
+  React,
+  tw,
+  useDebounce,
+  useEffect,
+  useState,
+} from "./deps.ts";
+import { close_splashscreen, evaluate } from "./commands.ts";
+import { useStore } from "./hooks/use-store.ts";
+import TitleBar from "./components/UI/organisms/title-bar.tsx";
+import Tabs from "./components/UI/molecules/tabs.tsx";
+import { ITab } from "./components/UI/atoms/tab.tsx";
 
 export default function App() {
-  const [state, setState] = useState<string | undefined>(`const limit = 15;
-let count = 1;
-Array(limit).fill(0).reduce((acc, _, index) => {
-  const spaces = ' '.repeat(
-    Math.abs(limit - count) / 2
-  );
-  const stars = '*'.repeat(count) + '\\n';
-  index >= Math.floor(limit / 2)
-    ? count -= 2
-    : count += 2;
-  return \`\${acc}\${spaces}\${stars}\`;
-}, '\\n');`);
-  const [compiled, setCompiled] = useState<string | undefined>("");
+  const [state, setState] = useState("");
+  const [compiled, setCompiled] = useState("");
+  const [storedTabs, setStoredTabs] = useState<Array<ITab>>();
+  const [activeTab, setActiveTab] = useState("");
+  const { get, set } = useStore();
+
   const updateState = (value: string | undefined) => {
-    setState(value);
+    setState(value ?? "");
   };
 
+  useEffect(() => {
+    (async () => {
+      let tabs = await get("tabs");
+      let activeTab = await get("activeTab");
+      if (!tabs) {
+        tabs = [{ id: "first", title: "" }];
+      }
+      if (!activeTab) {
+        activeTab = tabs[0].id;
+      }
+      setStoredTabs(tabs);
+      setActiveTab(activeTab);
+    })();
+
+    setTimeout(() => {
+      close_splashscreen();
+    }, 100);
+  }, []);
+
   useDebounce(
-    () => {
-      invoke<Array<{ start: number; output: string }>>("evaluate", {
-        javascript: state,
-      }).then((result) => {
-        console.log(result);
-        let parsed = "";
-        let lines = 0;
-        result.forEach((line) => {
-          parsed += "\n".repeat(line.start - lines) + line.output +
-            "\n";
-          lines = line.start + 1;
-        });
-        console.log(parsed.trimEnd());
-        setCompiled(parsed.trimEnd());
-      });
+    async () => {
+      if (!state) {
+        return;
+      }
+      try {
+        const result = await evaluate(state);
+        setCompiled(result);
+        await set(["code", activeTab + ""], state);
+        await set(["compiled", activeTab + ""], result);
+      } catch (error) {
+        setCompiled(error.split("\n")[0]);
+      }
     },
-    500,
+    300,
     [state],
   );
 
-  useEffect(() => {
-    loader.init().then((monaco) => {
-      monaco.editor.defineTheme(
-        "OneDark",
-        OneDarkTheme as editor.IStandaloneThemeData,
-      );
-    });
-  }, []);
-
   return (
-    <main className={tw`h-screen w-screen bg-background flex overflow-hidden`}>
-      <div className={tw`w-2/3 border-r border-border`}>
-        <Editor
-          key="typescript"
-          onChange={updateState}
-          value={state}
-          language="typescript"
-          theme="OneDark"
-          options={{
-            minimap: { enabled: false },
-            wordWrap: "on",
-            bracketPairColorization: {
-              enabled: true,
-            },
-            scrollbar: {
-              vertical: "hidden",
-            },
-            hideCursorInOverviewRuler: true,
-            inlayHints: {
-              enabled: "on",
-            },
-          }}
-        />
-      </div>
-      <div className={tw`w-1/3 px-3`}>
-        <Editor
-          key="compiled"
-          value={compiled}
-          language="javascript"
-          theme="OneDark"
-          options={{
-            minimap: { enabled: false },
-            wordWrap: "on",
-            bracketPairColorization: {
-              enabled: true,
-            },
-            scrollbar: {
-              vertical: "hidden",
-            },
-            readOnly: true,
-            renderLineHighlight: "none",
-            hideCursorInOverviewRuler: true,
-          }}
-        />
-      </div>
+    <main className={tw`bg-background flex flex-col h-screen`}>
+      <TitleBar>
+        {storedTabs && (
+          <Tabs
+            initialTabs={storedTabs}
+            initialActiveTab={activeTab}
+            onChange={async (_, activeTab) => {
+              const code = await get(["code", activeTab + ""]);
+              const compiled = await get(["compiled", activeTab + ""]);
+              setState(code ?? "");
+              setCompiled(compiled ?? "");
+              setActiveTab(activeTab);
+            }}
+          />
+        )}
+      </TitleBar>
+      <PanelGroup
+        autoSaveId="layout"
+        direction="horizontal"
+      >
+        <Panel defaultSize={60} className={tw`pt-3`}>
+          <Editor
+            key="editor"
+            onChange={updateState}
+            value={state}
+            language="typescript"
+            path={activeTab + ".ts"}
+          />
+        </Panel>
+        <PanelResizeHandle
+          className={tw`w-2 flex justify-center`}
+        >
+          <div className={tw`h-full w-[2px] bg-border`}></div>
+        </PanelResizeHandle>
+        <Panel className={tw`pt-3`}>
+          <Editor
+            key="output"
+            value={compiled}
+            language="javascript"
+            path={activeTab + ".compiled.ts"}
+            className={tw(
+              css({
+                ".monaco-editor-overlaymessage": { display: "none !important" },
+              }),
+            )}
+            readOnly
+          />
+        </Panel>
+      </PanelGroup>
     </main>
   );
 }
