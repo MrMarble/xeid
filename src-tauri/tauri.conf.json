@@ -16,6 +16,17 @@
       "shell": {
         "all": false,
         "open": true
+      },
+      "window": {
+        "all": false,
+        "close": true,
+        "hide": true,
+        "show": true,
+        "maximize": true,
+        "minimize": true,
+        "unmaximize": true,
+        "unminimize": true,
+        "startDragging": true
       }
     },
     "bundle": {
@@ -27,7 +38,7 @@
         "icons/icon.icns",
         "icons/icon.ico"
       ],
-      "identifier": "com.tauri.dev",
+      "identifier": "runts",
       "targets": "all"
     },
     "security": {
@@ -42,7 +53,9 @@
         "resizable": true,
         "title": "RunTS",
         "width": 1000,
-        "height": 600
+        "height": 600,
+        "visible": false,
+        "decorations": false
       }
     ]
   }
