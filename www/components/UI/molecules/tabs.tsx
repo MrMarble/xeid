@@ -38,8 +38,20 @@ export default function Tabs(
     onChange?.(tabs, activeTab);
   }, [tabs, activeTab]);
 
+  const tabsRef = React.useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const tabsElement = tabsRef.current;
+    if (tabsElement) {
+      tabsElement.addEventListener("wheel", (event: WheelEvent) => {
+        event.preventDefault();
+        tabsElement.scrollLeft += event.deltaY;
+      })
+    }
+  }, [])
+
   return (
-    <div className={tw`flex`}>
+    <div ref={tabsRef} className={`${tw`flex overflow-x-scroll overflow-y-hidden w-full`}`} data-tauri-drag-region>
       {tabs.map((tab, index) => (
         <Tab
           id={tab.id}
