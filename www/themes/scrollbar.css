@@ -14,7 +14,3 @@
 ::-webkit-scrollbar-thumb:hover {
   background: #555;
 }
-
-.scroll-behaviour {
-  transform: rotate(90deg);
-}
