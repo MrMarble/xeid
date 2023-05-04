@@ -8,9 +8,9 @@
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #888;
+  background: transparent;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #555;
+  background: transparent;
 }

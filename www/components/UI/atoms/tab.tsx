@@ -26,8 +26,8 @@ export default function Tab(
     <div
       className={tw(
         style,
-        `w-44 border(border 2 b-0 t-0) bg-background px-2 pt-0.5 text-foreground flex justify-between transition-colors items-center flex-nowrap group h-full`,
-        active && "-mb-0.5 pt-0",
+        `w-44 border(border 2 b-1 t-0) bg-background px-2 pt-0.5 text-foreground flex justify-between transition-colors items-center flex-nowrap group h-full cursor-pointer `,
+        active && "-mb-0.5 pt-0 border(border 2 b-0 t-0)",
         !active && "hover:bg-border",
       )}
       onClick={onClick}

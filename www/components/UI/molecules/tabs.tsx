@@ -55,7 +55,7 @@ export default function Tabs(
   }, [])
 
   return (
-    <div ref={tabsRef} className={tw`flex overflow-x-scroll overflow-y-hidden w-full`} data-tauri-drag-region>
+    <div ref={tabsRef} className={tw`flex overflow-x-overlay w-full`} data-tauri-drag-region>
       {tabs.map((tab, index) => (
         <Tab
           id={tab.id}
