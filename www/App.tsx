@@ -65,7 +65,15 @@ export default function App() {
   );
 
   return (
-    <main className={tw`bg-background flex flex-col h-screen`}>
+    <main
+      className={tw`bg-background flex flex-col h-screen`}
+      onContextMenu={(event) => {
+        if (IS_PRODUCTION) {
+          event.preventDefault();
+          return false;
+        }
+      }}
+    >
       <TitleBar>
         {storedTabs && (
           <Tabs
