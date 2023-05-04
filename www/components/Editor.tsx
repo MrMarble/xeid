@@ -18,9 +18,21 @@ interface IEditorProps extends
   readOnly?: boolean;
 }
 
-function Editor(
-  { onChange, value, language, readOnly, className, path }: IEditorProps,
-) {
+const Editor = React.forwardRef<editor.IStandaloneCodeEditor, IEditorProps>((
+  { onChange, value, language, readOnly, className, path },
+  ref,
+) => {
+  const handleMount = (editor: editor.IStandaloneCodeEditor) => {
+    editor.focus();
+    if (ref) {
+      if (typeof ref === "function") {
+        ref(editor);
+      } else {
+        ref.current = editor;
+      }
+    }
+  };
+
   useEffect(() => {
     const init = async () => {
       const monaco = await loader.init();
@@ -62,8 +74,9 @@ function Editor(
         overviewRulerLanes: 0,
         "semanticHighlighting.enabled": true,
       }}
+      onMount={handleMount}
     />
   );
-}
+});
 
 export default Editor;

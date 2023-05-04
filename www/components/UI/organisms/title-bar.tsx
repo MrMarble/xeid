@@ -6,12 +6,16 @@ export default function TitleBar({ children }: { children: React.ReactNode }) {
   return (
     <div
       data-tauri-drag-region
-      className={tw`bg-backgroundAlt flex w-full border(b border b-2) select-none overflow-hidden`}
+      className={tw`bg-backgroundAlt flex w-full select-none overflow-hidden`}
     >
-      <img
-        src="/public/32x32.png"
-        className={tw`h-5 w-5 m-2 select-none pointer-events-none`}
-      />
+      <div
+        className={tw`flex px-2 items-center h-full border(border 0 b-2 t-0) pointer-events-none select-none`}
+      >
+        <img
+          src="/public/32x32.png"
+          className={tw`flex h-5 w-5 object-contain `}
+        />
+      </div>
       {children}
       <WindowControls />
     </div>

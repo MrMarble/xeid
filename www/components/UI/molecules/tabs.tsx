@@ -36,6 +36,13 @@ export default function Tabs(
   useEffect(() => {
     updateState();
     onChange?.(tabs, activeTab);
+    if (tabsRef.current) {
+      console.log(tabsRef.current.scrollWidth);
+      tabsRef.current.scrollTo({
+        left: tabsRef.current.scrollWidth,
+        behavior: "smooth",
+      });
+    }
   }, [tabs, activeTab]);
 
   const tabsRef = React.useRef<HTMLDivElement>(null);
@@ -45,17 +52,21 @@ export default function Tabs(
     if (tabsElement) {
       tabsElement.addEventListener("wheel", (event: WheelEvent) => {
         event.preventDefault();
-        tabsElement.scrollLeft += event.deltaY;
-      })
+        tabsElement.scrollLeft += event.deltaY || event.deltaX;
+      });
     }
 
     return () => {
-      tabsElement.removeEventListener("wheel", () => {});
-    }
-  }, [])
+      tabsElement?.removeEventListener("wheel", () => {});
+    };
+  }, []);
 
   return (
-    <div ref={tabsRef} className={tw`flex overflow-x-scroll overflow-y-hidden w-full`} data-tauri-drag-region>
+    <div
+      ref={tabsRef}
+      className={"scrollbar " + tw`flex w-full`}
+      data-tauri-drag-region
+    >
       {tabs.map((tab, index) => (
         <Tab
           id={tab.id}
@@ -72,23 +83,25 @@ export default function Tabs(
               setActiveTab(filteredTabs[index - 1]?.id ?? tabs?.[0]?.id);
             }
           }}
-          onDoubleClick={() => {
-            tab.title = tab.id;
+          onDoubleClick={(title) => {
+            tab.title = title;
             setTabs([...tabs]);
           }}
           canClose={tabs.length > 1}
         />
       ))}
-      <Button
-        className={tw`py-0 px-2`}
-        onClick={() => {
-          const newTab = { id: newID(), title: "" };
-          setTabs([...tabs, newTab]);
-          setActiveTab(newTab.id);
-        }}
-      >
-        <Add className={tw`text-titlebar`} />
-      </Button>
+      <div className={tw`flex-grow border(border b-2)`} data-tauri-drag-region>
+        <Button
+          className={tw`py-0 px-2 h-full`}
+          onClick={() => {
+            const newTab = { id: newID(), title: "" };
+            setTabs([...tabs, newTab]);
+            setActiveTab(newTab.id);
+          }}
+        >
+          <Add className={tw`text-titlebar`} />
+        </Button>
+      </div>
     </div>
   );
 }

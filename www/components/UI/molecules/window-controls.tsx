@@ -32,7 +32,7 @@ export default function WindowControls() {
   }, []);
 
   return (
-    <div className={tw`h-full flex justify-end`}>
+    <div className={tw`h-full flex justify-end border(border 0 b-2 t-0)`}>
       <Button onClick={handleMinimize} className={tw`h-full`}>
         <Minimize className={tw`text-titlebar group-hover:text-white`} />
       </Button>

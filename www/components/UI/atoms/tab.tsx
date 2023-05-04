@@ -1,12 +1,13 @@
 import { css, React, tw } from "../../../deps.ts";
 import { Button } from "./mod.ts";
 import { Close } from "../../icons/mod.ts";
+import EditableLabel from "./editable-label.tsx";
 
 interface TabProps extends ITab {
   active?: boolean;
   onClose?: () => void;
   onClick?: () => void;
-  onDoubleClick?: () => void;
+  onDoubleClick: (text: string) => void;
   canClose?: boolean;
 }
 
@@ -26,18 +27,17 @@ export default function Tab(
     <div
       className={tw(
         style,
-        `w-44 border(border 2 b-0 t-0) bg-background px-2 pt-0.5 text-foreground flex justify-between transition-colors items-center flex-nowrap group h-full`,
-        active && "-mb-0.5 pt-0",
+        `w-44 border(border 2 b-2 t-0) bg-background px-2 pt-0.5 text-foreground flex justify-between transition-colors items-center flex-nowrap group h-full cursor-pointer `,
+        active && "-mb-0.5 pt-0 border(border 2 b-0 t-0)",
         !active && "hover:bg-border",
       )}
       onClick={onClick}
-      onDoubleClick={(e: MouseEvent) => onDoubleClick?.()}
     >
       <p
         className={tw`text-xs h-full text-foreground w-32 overflow-ellipsis overflow-hidden whitespace-nowrap flex items-center`}
       >
         <span className={tw`mr-2 h-full flex items-center`}>❯</span>
-        {title}
+        <EditableLabel text={title} onChange={onDoubleClick} />
       </p>
 
       {canClose && (

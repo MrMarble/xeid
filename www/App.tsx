@@ -15,6 +15,7 @@ import { useStore } from "./hooks/use-store.ts";
 import TitleBar from "./components/UI/organisms/title-bar.tsx";
 import Tabs from "./components/UI/molecules/tabs.tsx";
 import { ITab } from "./components/UI/atoms/tab.tsx";
+import { editor } from "https://esm.sh/v117/monaco-editor@0.37.1/esm/vs/editor/editor.api.js";
 
 export default function App() {
   const [state, setState] = useState("");
@@ -22,7 +23,7 @@ export default function App() {
   const [storedTabs, setStoredTabs] = useState<Array<ITab>>();
   const [activeTab, setActiveTab] = useState("");
   const { get, set } = useStore();
-
+  const editorRef = React.useRef<editor.IStandaloneCodeEditor>(null);
   const updateState = (value: string | undefined) => {
     setState(value ?? "");
   };
@@ -39,12 +40,16 @@ export default function App() {
       }
       setStoredTabs(tabs);
       setActiveTab(activeTab);
+      editorRef.current?.focus();
+      setTimeout(() => {
+        close_splashscreen();
+      }, 100);
     })();
-
-    setTimeout(() => {
-      close_splashscreen();
-    }, 100);
   }, []);
+
+  useEffect(() => {
+    editorRef.current?.focus();
+  }, [activeTab]);
 
   useDebounce(
     async () => {
@@ -100,6 +105,7 @@ export default function App() {
             value={state}
             language="typescript"
             path={activeTab + ".ts"}
+            ref={editorRef}
           />
         </Panel>
         <PanelResizeHandle
