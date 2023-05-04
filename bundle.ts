@@ -17,6 +17,9 @@ const ctx = await esbuild.context({
     ...denoPlugins(),
   ],
   publicPath: "./www/public",
+  define: {
+    "IS_PRODUCTION": "false",
+  },
 });
 
 await ctx.watch();

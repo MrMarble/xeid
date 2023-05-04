@@ -24,7 +24,7 @@ setup({
 const root = createRoot(document.getElementById("root") as HTMLElement);
 root.render(<App />);
 
-if (!window.IS_PRODUCTION) {
+if (!IS_PRODUCTION) {
   new EventSource("/esbuild").addEventListener(
     "change",
     () => location.reload(),
@@ -32,7 +32,5 @@ if (!window.IS_PRODUCTION) {
 }
 
 declare global {
-  interface Window {
-    IS_PRODUCTION: boolean;
-  }
+  var IS_PRODUCTION: boolean;
 }
