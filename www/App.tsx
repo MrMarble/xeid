@@ -103,7 +103,7 @@ export default function App() {
         <PanelResizeHandle
           className={tw`w-2 flex justify-center`}
         >
-          <div className={tw`h-full w-[2px] bg-border`}></div>
+          <div className={tw`h-full w-px bg-border`}></div>
         </PanelResizeHandle>
         <Panel className={tw`pt-3`}>
           <Editor

@@ -33,7 +33,7 @@ export default function WindowControls() {
   }, []);
 
   return (
-    <div className={tw`h-full flex justify-end border(border 0 b-2 t-0)`}>
+    <div className={tw`h-full flex justify-end border(border 0 b-1 t-0)`}>
       <Button onClick={handleMinimize} className={tw`h-full`}>
         <Icon
           name="minimize"

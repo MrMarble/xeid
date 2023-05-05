@@ -90,7 +90,7 @@ export default function Tabs(
           canClose={tabs.length > 1}
         />
       ))}
-      <div className={tw`flex-grow border(border b-2)`} data-tauri-drag-region>
+      <div className={tw`flex-grow border(border b-1)`} data-tauri-drag-region>
         <Button
           className={tw`py-0 px-2 h-full`}
           onClick={() => {
