@@ -15,6 +15,8 @@ fn main() {
         .plugin(tauri_plugin_store::Builder::default().build())
         .setup(|app| {
             if let Some(window) = app.get_window("main") {
+                #[cfg(debug_assertions)]
+                window.open_devtools();
                 #[cfg(any(windows, target_os = "macos"))]
                 let _ = window_shadows::set_shadow(&window, true);
             }
