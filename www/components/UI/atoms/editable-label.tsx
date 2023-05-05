@@ -1,4 +1,5 @@
-import { React, tw, useState } from "../../../deps.ts";
+import React, { useState } from "react";
+import { tw } from "twind";
 
 interface EditableLabelProps {
   text: string;

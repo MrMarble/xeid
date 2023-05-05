@@ -1,4 +1,4 @@
-import { invoke } from "./deps.ts";
+import { invoke } from "tauri-apps/api/tauri";
 
 export async function evaluate(code: string) {
   return await invoke<string>("evaluate", { javascript: code });

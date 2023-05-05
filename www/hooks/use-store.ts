@@ -1,4 +1,5 @@
-import { Store, useEffect } from "../deps.ts";
+import { useEffect } from "react";
+import { Store } from "tauri-apps/store";
 
 const DEFAULT_STORE = "runts.dat";
 const store = new Store(DEFAULT_STORE);

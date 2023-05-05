@@ -1,0 +1,12 @@
+{
+  "imports": {
+    "react": "https://esm.sh/react@18.2.0",
+    "react-dom/client": "https://esm.sh/react-dom@18.2.0/client",
+    "twind": "https://cdn.skypack.dev/twind?dts",
+    "twind/css": "https://cdn.skypack.dev/twind/css?dts",
+    "tauri-apps/api/tauri": "https://esm.sh/@tauri-apps/api@1.2.0/tauri",
+    "tauri-apps/api/window": "https://esm.sh/@tauri-apps/api@1.2.0/window",
+    "tauri-apps/store": "https://esm.sh/gh/tauri-apps/tauri-plugin-store@f4ef29684e",
+    "@monaco-editor/react": "https://esm.sh/@monaco-editor/react@4.5.0"
+  }
+}

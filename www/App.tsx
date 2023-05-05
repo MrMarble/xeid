@@ -1,15 +1,7 @@
+import React, { useEffect, useRef, useState } from "react";
+import { css, tw } from "twind/css";
 import Editor from "./components/Editor.tsx";
-import {
-  css,
-  Panel,
-  PanelGroup,
-  PanelResizeHandle,
-  React,
-  tw,
-  useDebounce,
-  useEffect,
-  useState,
-} from "./deps.ts";
+import { Panel, PanelGroup, PanelResizeHandle, useDebounce } from "./deps.ts";
 import { close_splashscreen, evaluate } from "./commands.ts";
 import { useStore } from "./hooks/use-store.ts";
 import TitleBar from "./components/UI/organisms/title-bar.tsx";
@@ -23,7 +15,7 @@ export default function App() {
   const [storedTabs, setStoredTabs] = useState<Array<ITab>>();
   const [activeTab, setActiveTab] = useState("");
   const { get, set } = useStore();
-  const editorRef = React.useRef<editor.IStandaloneCodeEditor>(null);
+  const editorRef = useRef<editor.IStandaloneCodeEditor>(null);
   const updateState = (value: string | undefined) => {
     setState(value ?? "");
   };

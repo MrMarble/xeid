@@ -8,13 +8,18 @@ const ctx = await esbuild.context({
   format: "esm",
   target: "es2020",
   platform: "browser",
+  sourcemap: true,
   plugins: [
     {
       name: "json",
       setup: (build) =>
         build.onLoad({ filter: /\.json$/ }, () => ({ loader: "json" })),
     },
-    ...denoPlugins(),
+    ...denoPlugins({
+      configPath: `${
+        new URL(".", import.meta.url).pathname.substring(1)
+      }deno.json`,
+    }),
   ],
   publicPath: "./www/public",
   define: {

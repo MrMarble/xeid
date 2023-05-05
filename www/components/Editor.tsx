@@ -1,14 +1,11 @@
-import {
-  editor,
-} from "https://esm.sh/v117/monaco-editor@0.37.1/esm/vs/editor/editor.api";
+import React, { useEffect } from "react";
 import {
   Editor as BaseEditor,
   EditorProps,
   loader,
-  React,
-  useEffect,
-} from "../deps.ts";
+} from "@monaco-editor/react";
 import OneDarkTheme from "../themes/onedark.json" assert { type: "json" };
+import type { editor } from "https://esm.sh/v117/monaco-editor@0.37.1/esm/vs/editor/editor.api.js";
 
 interface IEditorProps extends
   Pick<

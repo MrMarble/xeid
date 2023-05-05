@@ -1,7 +1,6 @@
-import { css, React, tw } from "../../../deps.ts";
-import { Button } from "./mod.ts";
-import { Close } from "../../icons/mod.ts";
-import EditableLabel from "./editable-label.tsx";
+import React from "react";
+import { css, tw } from "twind/css";
+import { Button, EditableLabel, Icon } from "./mod.ts";
 
 interface TabProps extends ITab {
   active?: boolean;
@@ -52,7 +51,8 @@ export default function Tab(
             onClose?.();
           }}
         >
-          <Close
+          <Icon
+            name="close"
             className={tw`text-titlebar group-hover:text-white w-3 h-3`}
           />
         </Button>

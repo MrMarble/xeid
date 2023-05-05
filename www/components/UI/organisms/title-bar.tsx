@@ -1,5 +1,5 @@
-import { React, tw } from "../../../deps.ts";
-
+import React from "react";
+import { tw } from "twind";
 import WindowControls from "../molecules/window-controls.tsx";
 
 export default function TitleBar({ children }: { children: React.ReactNode }) {

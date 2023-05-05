@@ -1,6 +1,6 @@
-import { React, setup, strict } from "./deps.ts";
-import * as colors from "https://cdn.skypack.dev/twind/colors";
-import { createRoot } from "https://esm.sh/react-dom@18.2.0/client";
+import React from "react";
+import { createRoot } from "react-dom/client";
+import { setup, strict } from "twind";
 
 import App from "./App.tsx";
 
@@ -15,7 +15,6 @@ setup({
         border: "#3e4452",
         foreground: "#c7ccd6",
         titlebar: "#6b717d",
-        ...colors,
       },
     },
   },
@@ -32,5 +31,6 @@ if (!IS_PRODUCTION) {
 }
 
 declare global {
+  // deno-lint-ignore no-var
   var IS_PRODUCTION: boolean;
 }

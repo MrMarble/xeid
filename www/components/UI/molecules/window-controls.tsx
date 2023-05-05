@@ -1,6 +1,7 @@
-import { appWindow, React, tw, useEffect, useState } from "../../../deps.ts";
-import { Button } from "../atoms/mod.ts";
-import { Close, Maximize, Minimize, Restore } from "../../icons/mod.ts";
+import React, { useEffect, useState } from "react";
+import { tw } from "twind";
+import { appWindow } from "tauri-apps/api/window";
+import { Button, Icon } from "../atoms/mod.ts";
 
 export default function WindowControls() {
   const [isMaximized, setIsMaximized] = useState(false);
@@ -34,18 +35,25 @@ export default function WindowControls() {
   return (
     <div className={tw`h-full flex justify-end border(border 0 b-2 t-0)`}>
       <Button onClick={handleMinimize} className={tw`h-full`}>
-        <Minimize className={tw`text-titlebar group-hover:text-white`} />
+        <Icon
+          name="minimize"
+          className={tw`text-titlebar group-hover:text-white`}
+        />
       </Button>
       <Button onClick={handleMaximize} className={tw`h-full`}>
-        {isMaximized
-          ? <Restore className={tw`text-titlebar group-hover:text-white`} />
-          : <Maximize className={tw`text-titlebar group-hover:text-white`} />}
+        <Icon
+          name={isMaximized ? "restore" : "maximize"}
+          className={tw`text-titlebar group-hover:text-white`}
+        />
       </Button>
       <Button
         onClick={handleClose}
         className={tw`hover:bg-red-500 h-full`}
       >
-        <Close className={tw`text-titlebar group-hover:text-white`} />
+        <Icon
+          name="close"
+          className={tw`text-titlebar group-hover:text-white`}
+        />
       </Button>
     </div>
   );

@@ -1,8 +1,8 @@
-import { React, tw, useEffect, useState } from "../../../deps.ts";
+import React, { useEffect, useState } from "react";
+import { tw } from "twind";
 import { useStore } from "../../../hooks/use-store.ts";
-import Add from "../../icons/add.tsx";
-import Button from "../atoms/button.tsx";
-import Tab, { type ITab } from "../atoms/tab.tsx";
+import { Button, Icon, Tab } from "../atoms/mod.ts";
+import { type ITab } from "../atoms/tab.tsx";
 
 interface TabsProps {
   initialTabs?: Array<ITab>;
@@ -99,7 +99,7 @@ export default function Tabs(
             setActiveTab(newTab.id);
           }}
         >
-          <Add className={tw`text-titlebar`} />
+          <Icon name="add" className={tw`text-titlebar`} />
         </Button>
       </div>
     </div>

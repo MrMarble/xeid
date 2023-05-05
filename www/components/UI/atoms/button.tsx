@@ -1,4 +1,5 @@
-import { apply, React, tw } from "../../../deps.ts";
+import React from "react";
+import { apply, tw } from "twind/css";
 
 type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement>;
 
