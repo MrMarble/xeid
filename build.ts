@@ -26,7 +26,6 @@ await esbuild.build({
     "IS_PRODUCTION": "true",
   },
   publicPath: "./src-tauri/icons",
-  jsx: "automatic",
 });
 
 esbuild.stop();
