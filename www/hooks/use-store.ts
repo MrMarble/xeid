@@ -11,7 +11,7 @@ interface StoreValue {
   tabs: Array<{ id: string; title: string }>;
 }
 
-export function useStore() {
+export default function useStore() {
   useEffect(() => {
     return () => {
       store.save();

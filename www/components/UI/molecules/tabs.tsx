@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { tw } from "twind";
-import { useStore } from "../../../hooks/use-store.ts";
+import { useStore } from "../../../hooks/mod.ts";
 import { Button, Icon, Tab } from "../atoms/mod.ts";
 import { type ITab } from "../atoms/tab.tsx";
 

@@ -1,9 +1,9 @@
 import React, { useEffect, useRef, useState } from "react";
 import { css, tw } from "twind/css";
 import Editor from "./components/Editor.tsx";
-import { Panel, PanelGroup, PanelResizeHandle, useDebounce } from "./deps.ts";
+import { Panel, PanelGroup, PanelResizeHandle } from "./deps.ts";
 import { close_splashscreen, evaluate } from "./commands.ts";
-import { useStore } from "./hooks/use-store.ts";
+import { useDebounce, useStore } from "./hooks/mod.ts";
 import TitleBar from "./components/UI/organisms/title-bar.tsx";
 import Tabs from "./components/UI/molecules/tabs.tsx";
 import { ITab } from "./components/UI/atoms/tab.tsx";
