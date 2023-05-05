@@ -1,6 +1,13 @@
 {
   "version": "2",
   "remote": {
+    "https://cdn.skypack.dev/-/csstype@v3.1.1-sB6FD3Nc7oZb3uhLhxtK/dist=es2019,mode=types/index.d.ts": "1c29793071152b207c01ea1954e343be9a44d85234447b2b236acae9e709a383",
+    "https://cdn.skypack.dev/-/style-vendorizer@v2.2.3-Q2FwLODAcVuUplWkRLVT/dist=es2019,mode=imports/optimized/style-vendorizer.js": "1cb96efe1bd1b6e0614073cd7b3c19b7a50ae1c96c7663f0d69a75518f18811b",
+    "https://cdn.skypack.dev/-/twind@v0.16.19-CaNDOlA4Nfo7ponDzANK/dist=es2019,mode=imports/optimized/twind.js": "18c96bb78ada47ec34a4839242e5ebfcb98857bb5e9c0e64bf91cab56dc6e792",
+    "https://cdn.skypack.dev/-/twind@v0.16.19-CaNDOlA4Nfo7ponDzANK/dist=es2019,mode=imports/optimized/twind/sheets.js": "d8490b1c1f6157c358f5d6a1df980e9a5887239d4aa9c4a69bc2d107f36dab32",
+    "https://cdn.skypack.dev/-/twind@v0.16.19-CaNDOlA4Nfo7ponDzANK/dist=es2019,mode=types/twind.d.ts": "d92bbc98fd4163ecc5607ef5ea0973a975dadb6941aba4bc61d8536c1daa17b0",
+    "https://cdn.skypack.dev/twind/sheets?dts": "10e5142afe6a2b7d43fa9647677d578d705b8b4377d227d3733b17de0a5ab705",
+    "https://cdn.skypack.dev/twind?dts": "29ec2ec8efba6a38869953bbde5445c2d2b404f0fb0264d811ef69c5dc41475d",
     "https://deno.land/std@0.139.0/_util/assert.ts": "e94f2eb37cebd7f199952e242c77654e43333c1ac4c5c700e929ea3aa5489f74",
     "https://deno.land/std@0.139.0/_util/os.ts": "49b92edea1e82ba295ec946de8ffd956ed123e2948d9bd1d3e901b04e4307617",
     "https://deno.land/std@0.139.0/path/_constants.ts": "df1db3ffa6dd6d1252cc9617e5d72165cd2483df90e93833e13580687b6083c3",

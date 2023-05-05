@@ -64,7 +64,7 @@ export default function Tabs(
   return (
     <div
       ref={tabsRef}
-      className={"scrollbar " + tw`flex w-full`}
+      className={tw`scrollbar flex w-full`}
       data-tauri-drag-region
     >
       {tabs.map((tab, index) => (
