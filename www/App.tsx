@@ -26,6 +26,20 @@ export default function App() {
       let activeTab = await get("activeTab");
       if (!tabs) {
         tabs = [{ id: "first", title: "" }];
+        await set(
+          ["code", tabs[0].id],
+          `/*
+        * 👋 Bienvenido a RunTS 🚀
+        *
+        * Para comenzar, intente escribir algo de código
+        *
+        * Por ejemplo, aquí hay una función que devuelve una cadena:
+        */
+        const holaMundo = () => '¡Hola, Mundo! 🌎'
+        
+        // Cuando se llama a la función, el resultado se muestra a la derecha 👉
+        holaMundo()`,
+        );
       }
       if (!activeTab) {
         activeTab = tabs[0].id;
@@ -51,8 +65,8 @@ export default function App() {
       try {
         const result = await evaluate(state);
         setCompiled(result);
-        await set(["code", activeTab + ""], state);
-        await set(["compiled", activeTab + ""], result);
+        await set(["code", activeTab], state);
+        await set(["compiled", activeTab], result);
       } catch (error) {
         setCompiled(error.split("\n")[0]);
       }
