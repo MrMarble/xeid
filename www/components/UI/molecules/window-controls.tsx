@@ -34,13 +34,13 @@ export default function WindowControls() {
 
   return (
     <div className={tw`h-full flex justify-end border(border 0 b-1 t-0)`}>
-      <Button onClick={handleMinimize} className={tw`h-full`}>
+      <Button onClick={handleMinimize} className={tw`h-full px-3`}>
         <Icon
           name="minimize"
           className={tw`text-titlebar group-hover:text-white`}
         />
       </Button>
-      <Button onClick={handleMaximize} className={tw`h-full`}>
+      <Button onClick={handleMaximize} className={tw`h-full px-3`}>
         <Icon
           name={isMaximized ? "restore" : "maximize"}
           className={tw`text-titlebar group-hover:text-white`}
@@ -48,7 +48,7 @@ export default function WindowControls() {
       </Button>
       <Button
         onClick={handleClose}
-        className={tw`hover:bg-red-500 h-full`}
+        className={tw`hover:bg-red-500 h-full px-3`}
       >
         <Icon
           name="close"
