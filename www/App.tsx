@@ -112,6 +112,9 @@ export default function App() {
             language="typescript"
             path={activeTab + ".ts"}
             ref={editorRef}
+            onMount={(editor) => {
+              editor.focus();
+            }}
           />
         </Panel>
         <PanelResizeHandle

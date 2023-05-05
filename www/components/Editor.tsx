@@ -3,6 +3,7 @@ import {
   Editor as BaseEditor,
   EditorProps,
   loader,
+  Monaco,
 } from "@monaco-editor/react";
 import OneDarkTheme from "../themes/onedark.json" assert { type: "json" };
 import type { editor } from "https://esm.sh/v117/monaco-editor@0.37.1/esm/vs/editor/editor.api.js";
@@ -10,23 +11,28 @@ import type { editor } from "https://esm.sh/v117/monaco-editor@0.37.1/esm/vs/edi
 interface IEditorProps extends
   Pick<
     EditorProps,
-    "onChange" | "value" | "path" | "language" | "className"
+    "onChange" | "value" | "path" | "language" | "className" | "onMount"
   > {
   readOnly?: boolean;
 }
 
 const Editor = React.forwardRef<editor.IStandaloneCodeEditor, IEditorProps>((
-  { onChange, value, language, readOnly, className, path },
+  { onChange, value, language, readOnly, className, path, onMount },
   ref,
 ) => {
-  const handleMount = (editor: editor.IStandaloneCodeEditor) => {
-    editor.focus();
+  const handleMount = (
+    editor: editor.IStandaloneCodeEditor,
+    monaco: Monaco,
+  ) => {
     if (ref) {
       if (typeof ref === "function") {
         ref(editor);
       } else {
         ref.current = editor;
       }
+    }
+    if (onMount) {
+      onMount(editor, monaco);
     }
   };
 
