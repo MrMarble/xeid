@@ -2,6 +2,8 @@ use deno_core::JsRuntime;
 use deno_core::RuntimeOptions;
 use tauri::Manager;
 
+use crate::core::linter::MarkerData;
+
 type CmdResult<T = ()> = Result<T, String>;
 
 #[tauri::command]
@@ -11,7 +13,7 @@ pub fn evaluate(javascript: &str) -> CmdResult<String> {
     match transpiled_src {
         Ok(transpiled_src) => match crate::deno::eval(&mut runtime, transpiled_src.into()) {
             Ok(evaluated) => Ok(unescape::unescape(evaluated.to_string().as_str()).unwrap()),
-            Err(err) => Err(err.to_string()),
+            Err(err) => Err(err),
         },
         Err(err) => Err(err.to_string()),
     }
@@ -25,4 +27,9 @@ pub async fn close_splashscreen(window: tauri::Window) {
     }
     // Show main window
     window.get_window("main").unwrap().show().unwrap();
+}
+
+#[tauri::command]
+pub fn lint(javascript: &str) -> Result<Vec<MarkerData>, [MarkerData; 1]> {
+    crate::core::linter::lint(javascript)
 }

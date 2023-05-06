@@ -6,5 +6,16 @@
       "dom",
       "dom.iterable"
     ]
+  },
+  "fmt": {
+    "exclude": [
+      "./www/dist"
+    ]
+  },
+  "lint": {
+    "exclude": [
+      "./www/dist",
+      "./www/themes"
+    ]
   }
 }

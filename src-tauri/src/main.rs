@@ -4,13 +4,15 @@
 use tauri::Manager;
 
 mod cmds;
+mod core;
 mod deno;
 
 fn main() {
     tauri::Builder::default()
         .invoke_handler(tauri::generate_handler![
             cmds::evaluate,
-            cmds::close_splashscreen
+            cmds::close_splashscreen,
+            cmds::lint
         ])
         .plugin(tauri_plugin_store::Builder::default().build())
         .setup(|app| {

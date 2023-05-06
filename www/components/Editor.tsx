@@ -6,7 +6,7 @@ import {
   Monaco,
 } from "@monaco-editor/react";
 import OneDarkTheme from "../themes/onedark.json" assert { type: "json" };
-import type { editor } from "https://esm.sh/v117/monaco-editor@0.37.1/esm/vs/editor/editor.api.js";
+import type { editor } from "@monaco-editor/editor";
 
 interface IEditorProps extends
   Pick<
@@ -43,6 +43,12 @@ const Editor = React.forwardRef<editor.IStandaloneCodeEditor, IEditorProps>((
         "OneDark",
         OneDarkTheme as editor.IStandaloneThemeData,
       );
+
+      monaco.languages.typescript.typescriptDefaults.setDiagnosticsOptions({
+        noSemanticValidation: true,
+        noSyntaxValidation: true,
+        noSuggestionDiagnostics: true,
+      });
     };
 
     init();

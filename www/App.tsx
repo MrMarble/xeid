@@ -2,12 +2,13 @@ import React, { useEffect, useRef, useState } from "react";
 import { css, tw } from "twind/css";
 import Editor from "./components/Editor.tsx";
 import { Panel, PanelGroup, PanelResizeHandle } from "./deps.ts";
-import { close_splashscreen, evaluate } from "./commands.ts";
+import { close_splashscreen, evaluate, isLintError, lint } from "./commands.ts";
 import { useDebounce, useStore } from "./hooks/mod.ts";
 import TitleBar from "./components/UI/organisms/title-bar.tsx";
 import Tabs from "./components/UI/molecules/tabs.tsx";
 import { ITab } from "./components/UI/atoms/tab.tsx";
-import { editor } from "https://esm.sh/v117/monaco-editor@0.37.1/esm/vs/editor/editor.api.js";
+import type { editor } from "@monaco-editor/editor";
+import type { Monaco } from "@monaco-editor/react";
 
 export default function App() {
   const [state, setState] = useState("");
@@ -16,6 +17,7 @@ export default function App() {
   const [activeTab, setActiveTab] = useState("");
   const { get, set } = useStore();
   const editorRef = useRef<editor.IStandaloneCodeEditor>(null);
+  const monacoRef = useRef<Monaco>(null);
   const updateState = (value: string | undefined) => {
     setState(value ?? "");
   };
@@ -63,12 +65,38 @@ export default function App() {
         return;
       }
       try {
+        monacoRef.current?.editor.setModelMarkers(
+          editorRef?.current?.getModel()!,
+          "deno",
+          [],
+        );
+        const linted = await lint(state);
+        if (linted.length) {
+          console.log(linted);
+          monacoRef.current?.editor.setModelMarkers(
+            editorRef?.current?.getModel()!,
+            "deno",
+            linted,
+          );
+        }
         const result = await evaluate(state);
         setCompiled(result);
         await set(["code", activeTab], state);
         await set(["compiled", activeTab], result);
       } catch (error) {
-        setCompiled(error.split("\n")[0]);
+        console.error(error);
+        if (Array.isArray(error) && isLintError(error?.[0])) {
+          monacoRef.current?.editor.setModelMarkers(
+            editorRef?.current?.getModel()!,
+            "deno",
+            error,
+          );
+          setCompiled(
+            "\n".repeat(error[0].startLineNumber - 1) + error[0].message,
+          );
+        } else if (typeof error === "string") {
+          setCompiled(error.replace(/\s*at.+/gm, ""));
+        }
       }
     },
     300,
@@ -112,8 +140,9 @@ export default function App() {
             language="typescript"
             path={activeTab + ".ts"}
             ref={editorRef}
-            onMount={(editor) => {
+            onMount={(editor, monaco) => {
               editor.focus();
+              monacoRef.current = monaco;
             }}
           />
         </Panel>

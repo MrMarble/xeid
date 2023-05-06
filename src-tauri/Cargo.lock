@@ -589,6 +589,23 @@ dependencies = [
 ]
 
 [[package]]
+name = "deno_lint"
+version = "0.45.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "3867178bfb6579aaf9ed79599d3181d134f13dfcd38fdd93cae7d53a37bece8d"
+dependencies = [
+ "anyhow",
+ "deno_ast",
+ "derive_more",
+ "if_chain",
+ "log",
+ "once_cell",
+ "regex",
+ "serde",
+ "serde_json",
+]
+
+[[package]]
 name = "deno_media_type"
 version = "0.1.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2383,6 +2400,7 @@ dependencies = [
  "anyhow",
  "deno_ast",
  "deno_core",
+ "deno_lint",
  "futures",
  "serde",
  "serde_json",
