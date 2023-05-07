@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import { useEffect, forwardRef } from "react";
 import BaseEditor, {
   loader,
   EditorProps,
@@ -15,7 +15,7 @@ interface IEditorProps
   readOnly?: boolean;
 }
 
-const Editor = React.forwardRef<editor.IStandaloneCodeEditor, IEditorProps>(
+const Editor = forwardRef<editor.IStandaloneCodeEditor, IEditorProps>(
   ({ onChange, value, language, readOnly, className, path, onMount }, ref) => {
     const handleMount = (
       editor: editor.IStandaloneCodeEditor,

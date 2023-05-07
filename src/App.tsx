@@ -16,7 +16,7 @@ export default function App() {
   const [activeTab, setActiveTab] = useState("");
   const { get, set } = useStore();
   const editorRef = useRef<editor.IStandaloneCodeEditor>(null);
-  const monacoRef = useRef<Monaco>(null);
+  const monacoRef = useRef<Monaco | null>(null);
   const updateState = (value: string | undefined) => {
     setState(value ?? "");
   };

@@ -2,7 +2,7 @@ import WindowControls from "../molecules/window-controls.tsx";
 
 export default function TitleBar({ children }: { children: React.ReactNode }) {
   return (
-    <div
+    <header
       data-tauri-drag-region
       className="flex h-10 w-full select-none overflow-hidden bg-backgroundAlt"
     >
@@ -11,6 +11,6 @@ export default function TitleBar({ children }: { children: React.ReactNode }) {
       </div>
       {children}
       <WindowControls />
-    </div>
+    </header>
   );
 }
