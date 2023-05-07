@@ -7,7 +7,11 @@ export default function TitleBar({ children }: { children: React.ReactNode }) {
       className="flex h-10 w-full select-none overflow-hidden bg-backgroundAlt"
     >
       <div className="pointer-events-none flex h-full select-none items-center border-b border-border px-2">
-        <img src="/32x32.png" className="flex h-8 w-8 object-contain" />
+        <img
+          src="/32x32.png"
+          className="flex h-8 w-8 object-contain"
+          alt="runts logo"
+        />
       </div>
       {children}
       <WindowControls />
