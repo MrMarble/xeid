@@ -7,13 +7,15 @@ import TitleBar from "./components/UI/organisms/title-bar.tsx";
 import Tabs from "./components/UI/molecules/tabs.tsx";
 import { ITab } from "./components/UI/atoms/tab.tsx";
 import type { Monaco } from "@monaco-editor/react/dist/index";
+import type { editor } from "monaco-editor";
+
 export default function App() {
   const [state, setState] = useState("");
   const [compiled, setCompiled] = useState("");
   const [storedTabs, setStoredTabs] = useState<Array<ITab>>();
   const [activeTab, setActiveTab] = useState("");
   const { get, set } = useStore();
-  const editorRef = useRef<monaco.editor.IStandaloneCodeEditor>(null);
+  const editorRef = useRef<editor.IStandaloneCodeEditor>(null);
   const monacoRef = useRef<Monaco>(null);
   const updateState = (value: string | undefined) => {
     setState(value ?? "");
@@ -61,20 +63,17 @@ export default function App() {
       if (!state) {
         return;
       }
+
+      const model = editorRef?.current?.getModel();
+      if (!model) {
+        return;
+      }
       try {
-        monacoRef.current?.editor.setModelMarkers(
-          editorRef?.current?.getModel()!,
-          "deno",
-          []
-        );
+        monacoRef.current?.editor.setModelMarkers(model, "deno", []);
         const linted = await lint(state);
         if (linted.length) {
           console.log(linted);
-          monacoRef.current?.editor.setModelMarkers(
-            editorRef?.current?.getModel()!,
-            "deno",
-            linted
-          );
+          monacoRef.current?.editor.setModelMarkers(model, "deno", linted);
         }
         const result = await evaluate(state);
         setCompiled(result);
@@ -83,11 +82,7 @@ export default function App() {
       } catch (error) {
         console.error(error);
         if (Array.isArray(error) && isLintError(error?.[0])) {
-          monacoRef.current?.editor.setModelMarkers(
-            editorRef?.current?.getModel()!,
-            "deno",
-            error
-          );
+          monacoRef.current?.editor.setModelMarkers(model, "deno", error);
           setCompiled(
             "\n".repeat(error[0].startLineNumber - 1) + error[0].message
           );
