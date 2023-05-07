@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { Store } from "tauri-apps/store";
+import { Store } from "tauri-plugin-store-api";
 
 const DEFAULT_STORE = "runts.dat";
 const store = new Store(DEFAULT_STORE);
@@ -19,9 +19,7 @@ export default function useStore() {
   }, []);
 
   return {
-    get: async <
-      T extends storeKey,
-    >(key: T) => {
+    get: async <T extends storeKey>(key: T) => {
       let k: string;
       if (Array.isArray(key)) {
         k = key.join("_");

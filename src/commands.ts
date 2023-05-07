@@ -1,5 +1,5 @@
-import type { editor } from "https://esm.sh/v117/monaco-editor@0.37.1/esm/vs/editor/editor.api.js";
-import { invoke } from "tauri-apps/api/tauri";
+import { invoke } from "@tauri-apps/api/tauri";
+import type { editor } from "monaco-editor";
 
 export async function evaluate(code: string) {
   return await invoke<string>("evaluate", { javascript: code });
@@ -18,8 +18,6 @@ export function isLintError(error: unknown): error is editor.IMarkerData {
     return false;
   }
   return (
-    "startLineNumber" in error &&
-    "endLineNumber" in error &&
-    "message" in error
+    "startLineNumber" in error && "endLineNumber" in error && "message" in error
   );
 }

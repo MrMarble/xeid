@@ -1,22 +1,19 @@
-import React, { useEffect, useRef, useState } from "react";
-import { css, tw } from "twind/css";
+import { useEffect, useRef, useState } from "react";
 import Editor from "./components/Editor.tsx";
-import { Panel, PanelGroup, PanelResizeHandle } from "./deps.ts";
+import { Panel, PanelGroup, PanelResizeHandle } from "react-resizable-panels";
 import { close_splashscreen, evaluate, isLintError, lint } from "./commands.ts";
 import { useDebounce, useStore } from "./hooks/mod.ts";
 import TitleBar from "./components/UI/organisms/title-bar.tsx";
 import Tabs from "./components/UI/molecules/tabs.tsx";
 import { ITab } from "./components/UI/atoms/tab.tsx";
-import type { editor } from "@monaco-editor/editor";
-import type { Monaco } from "@monaco-editor/react";
-
+import type { Monaco } from "@monaco-editor/react/dist/index";
 export default function App() {
   const [state, setState] = useState("");
   const [compiled, setCompiled] = useState("");
   const [storedTabs, setStoredTabs] = useState<Array<ITab>>();
   const [activeTab, setActiveTab] = useState("");
   const { get, set } = useStore();
-  const editorRef = useRef<editor.IStandaloneCodeEditor>(null);
+  const editorRef = useRef<monaco.editor.IStandaloneCodeEditor>(null);
   const monacoRef = useRef<Monaco>(null);
   const updateState = (value: string | undefined) => {
     setState(value ?? "");
@@ -40,7 +37,7 @@ export default function App() {
         const holaMundo = () => '¡Hola, Mundo! 🌎'
         
         // Cuando se llama a la función, el resultado se muestra a la derecha 👉
-        holaMundo()`,
+        holaMundo()`
         );
       }
       if (!activeTab) {
@@ -68,7 +65,7 @@ export default function App() {
         monacoRef.current?.editor.setModelMarkers(
           editorRef?.current?.getModel()!,
           "deno",
-          [],
+          []
         );
         const linted = await lint(state);
         if (linted.length) {
@@ -76,7 +73,7 @@ export default function App() {
           monacoRef.current?.editor.setModelMarkers(
             editorRef?.current?.getModel()!,
             "deno",
-            linted,
+            linted
           );
         }
         const result = await evaluate(state);
@@ -89,10 +86,10 @@ export default function App() {
           monacoRef.current?.editor.setModelMarkers(
             editorRef?.current?.getModel()!,
             "deno",
-            error,
+            error
           );
           setCompiled(
-            "\n".repeat(error[0].startLineNumber - 1) + error[0].message,
+            "\n".repeat(error[0].startLineNumber - 1) + error[0].message
           );
         } else if (typeof error === "string") {
           setCompiled(error.replace(/\s*at.+/gm, ""));
@@ -100,14 +97,14 @@ export default function App() {
       }
     },
     300,
-    [state],
+    [state]
   );
 
   return (
     <main
-      className={tw`bg-background flex flex-col h-screen`}
+      className="flex h-screen flex-col bg-background"
       onContextMenu={(event) => {
-        if (IS_PRODUCTION) {
+        if (import.meta.env.PROD) {
           event.preventDefault();
           return false;
         }
@@ -128,11 +125,8 @@ export default function App() {
           />
         )}
       </TitleBar>
-      <PanelGroup
-        autoSaveId="layout"
-        direction="horizontal"
-      >
-        <Panel defaultSize={60} className={tw`pt-3`}>
+      <PanelGroup autoSaveId="layout" direction="horizontal">
+        <Panel defaultSize={60} className="pt-3">
           <Editor
             key="editor"
             onChange={updateState}
@@ -146,22 +140,15 @@ export default function App() {
             }}
           />
         </Panel>
-        <PanelResizeHandle
-          className={tw`w-2 flex justify-center`}
-        >
-          <div className={tw`h-full w-px bg-border`}></div>
+        <PanelResizeHandle className="flex w-2 justify-center">
+          <div className="h-full w-px bg-border"></div>
         </PanelResizeHandle>
-        <Panel className={tw`pt-3`}>
+        <Panel className="pt-3">
           <Editor
             key="output"
             value={compiled}
             language="javascript"
             path={activeTab + ".compiled.ts"}
-            className={tw(
-              css({
-                ".monaco-editor-overlaymessage": { display: "none !important" },
-              }),
-            )}
             readOnly
           />
         </Panel>

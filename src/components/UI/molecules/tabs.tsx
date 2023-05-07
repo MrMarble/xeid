@@ -1,5 +1,4 @@
-import React, { useEffect, useState } from "react";
-import { tw } from "twind";
+import { useEffect, useRef, useState } from "react";
 import { useStore } from "../../../hooks/mod.ts";
 import { Button, Icon, Tab } from "../atoms/mod.ts";
 import { type ITab } from "../atoms/tab.tsx";
@@ -7,24 +6,21 @@ import { type ITab } from "../atoms/tab.tsx";
 interface TabsProps {
   initialTabs?: Array<ITab>;
   initialActiveTab?: string;
-  onChange?: (
-    tabs: Array<ITab>,
-    activeTab: string,
-  ) => void;
+  onChange?: (tabs: Array<ITab>, activeTab: string) => void;
 }
 
 function newID() {
   return Date.now().toString(36) + Math.random().toString(36).substring(2);
 }
 
-export default function Tabs(
-  { initialTabs, onChange, initialActiveTab }: TabsProps,
-) {
-  const [tabs, setTabs] = useState(
-    initialTabs ?? [{ id: newID(), title: "" }],
-  );
+export default function Tabs({
+  initialTabs,
+  onChange,
+  initialActiveTab,
+}: TabsProps) {
+  const [tabs, setTabs] = useState(initialTabs ?? [{ id: newID(), title: "" }]);
   const [activeTab, setActiveTab] = useState(
-    initialActiveTab ?? (tabs?.[0]?.id || ""),
+    initialActiveTab ?? (tabs?.[0]?.id || "")
   );
   const { set } = useStore();
 
@@ -37,7 +33,6 @@ export default function Tabs(
     updateState();
     onChange?.(tabs, activeTab);
     if (tabsRef.current) {
-      console.log(tabsRef.current.scrollWidth);
       tabsRef.current.scrollTo({
         left: tabsRef.current.scrollWidth,
         behavior: "smooth",
@@ -45,7 +40,7 @@ export default function Tabs(
     }
   }, [tabs, activeTab]);
 
-  const tabsRef = React.useRef<HTMLDivElement>(null);
+  const tabsRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const tabsElement = tabsRef.current;
@@ -62,11 +57,7 @@ export default function Tabs(
   }, []);
 
   return (
-    <div
-      ref={tabsRef}
-      className={tw`scrollbar flex w-full`}
-      data-tauri-drag-region
-    >
+    <div ref={tabsRef} className="flex w-full scrollbar" data-tauri-drag-region>
       {tabs.map((tab, index) => (
         <Tab
           id={tab.id}
@@ -90,16 +81,19 @@ export default function Tabs(
           canClose={tabs.length > 1}
         />
       ))}
-      <div className={tw`flex-grow border(border b-1)`} data-tauri-drag-region>
+      <div
+        className="flex-grow border-b border-l border-border"
+        data-tauri-drag-region
+      >
         <Button
-          className={tw`py-0 px-2 h-full`}
+          className="h-full px-2 py-0"
           onClick={() => {
             const newTab = { id: newID(), title: "" };
             setTabs([...tabs, newTab]);
             setActiveTab(newTab.id);
           }}
         >
-          <Icon name="add" className={tw`text-titlebar`} />
+          <Icon name="add" className="text-titlebar" />
         </Button>
       </div>
     </div>

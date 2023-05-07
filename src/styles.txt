@@ -1,4 +1,3 @@
-import { css, setup, strict } from "twind/css";
 setup({
   mode: strict,
   hash: true,

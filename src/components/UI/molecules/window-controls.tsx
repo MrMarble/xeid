@@ -1,6 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { tw } from "twind";
-import { appWindow } from "tauri-apps/api/window";
+import { useEffect, useState } from "react";
+import { appWindow } from "@tauri-apps/api/window";
 import { Button, Icon } from "../atoms/mod.ts";
 
 export default function WindowControls() {
@@ -28,32 +27,26 @@ export default function WindowControls() {
 
     handleResize();
     return () => {
-      clearHandler();
+      clearHandler?.();
     };
   }, []);
 
   return (
-    <div className={tw`h-full flex justify-end border(border 0 b-1 t-0)`}>
-      <Button onClick={handleMinimize} className={tw`h-full px-3`}>
+    <div className="flex h-full justify-end border-b border-border">
+      <Button onClick={handleMinimize} className="h-full px-3">
         <Icon
           name="minimize"
-          className={tw`text-titlebar group-hover:text-white`}
+          className="text-titlebar group-hover:text-white"
         />
       </Button>
-      <Button onClick={handleMaximize} className={tw`h-full px-3`}>
+      <Button onClick={handleMaximize} className="h-full px-3">
         <Icon
           name={isMaximized ? "restore" : "maximize"}
-          className={tw`text-titlebar group-hover:text-white`}
+          className="text-titlebar group-hover:text-white"
         />
       </Button>
-      <Button
-        onClick={handleClose}
-        className={tw`hover:bg-red-500 h-full px-3`}
-      >
-        <Icon
-          name="close"
-          className={tw`text-titlebar group-hover:text-white`}
-        />
+      <Button onClick={handleClose} className="h-full px-3 hover:bg-red-500">
+        <Icon name="close" className="text-titlebar group-hover:text-white" />
       </Button>
     </div>
   );
