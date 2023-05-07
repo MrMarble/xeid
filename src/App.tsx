@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import Editor from "./components/Editor.tsx";
 import { Panel, PanelGroup, PanelResizeHandle } from "react-resizable-panels";
 import { close_splashscreen, evaluate, isLintError, lint } from "./commands.ts";
-import { useDebounce, useStore } from "./hooks/mod.ts";
+import { useDebounce, useStore } from "./hooks";
 import TitleBar from "./components/UI/organisms/title-bar.tsx";
 import Tabs from "./components/UI/molecules/tabs.tsx";
 import { ITab } from "./components/UI/atoms/tab.tsx";

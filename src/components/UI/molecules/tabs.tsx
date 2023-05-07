@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
-import { useStore } from "../../../hooks/mod.ts";
-import { Button, Icon, Tab } from "../atoms/mod.ts";
+import { useStore } from "../../../hooks";
+import { Button, Icon, Tab } from "../atoms";
 import { type ITab } from "../atoms/tab.tsx";
 
 interface TabsProps {
@@ -38,21 +38,27 @@ export default function Tabs({
         behavior: "smooth",
       });
     }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tabs, activeTab]);
 
   const tabsRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const tabsElement = tabsRef.current;
+    const tabsElement = tabsRef?.current;
+    const wheelHandler = (event: WheelEvent) => {
+      event.preventDefault();
+      if (!tabsElement) return;
+
+      tabsElement.scrollLeft += event.deltaY || event.deltaX;
+    };
+
     if (tabsElement) {
-      tabsElement.addEventListener("wheel", (event: WheelEvent) => {
-        event.preventDefault();
-        tabsElement.scrollLeft += event.deltaY || event.deltaX;
-      });
+      tabsElement.addEventListener("wheel", wheelHandler);
     }
 
     return () => {
-      tabsElement?.removeEventListener("wheel", () => {});
+      tabsElement?.removeEventListener("wheel", wheelHandler);
     };
   }, []);
 
