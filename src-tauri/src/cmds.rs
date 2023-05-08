@@ -1,22 +1,105 @@
-use deno_core::JsRuntime;
-use deno_core::RuntimeOptions;
-use tauri::Manager;
+use std::vec;
 
 use crate::core::linter::MarkerData;
+use deno_ast::swc::common::Spanned;
+use deno_core::JsRuntime;
+use tauri::Manager;
 
 type CmdResult<T = ()> = Result<T, String>;
 
+#[derive(Debug, serde::Serialize)]
+pub struct Expr(usize, String);
+
 #[tauri::command]
-pub fn evaluate(javascript: &str) -> CmdResult<String> {
-    let mut runtime = JsRuntime::new(RuntimeOptions::default());
-    let transpiled_src = crate::deno::transpile(javascript);
-    match transpiled_src {
-        Ok(transpiled_src) => match crate::deno::eval(&mut runtime, transpiled_src.into()) {
-            Ok(evaluated) => Ok(unescape::unescape(evaluated.to_string().as_str()).unwrap()),
-            Err(err) => Err(err),
+pub fn evaluate(javascript: &str) -> CmdResult<Vec<Expr>> {
+    let mut runtime: JsRuntime = JsRuntime::new(Default::default());
+    runtime.execute_script(
+        "runtime.js",
+        r#"
+    ((globalThis) => {
+      const core = Deno.core;
+    
+      function argsToMessage(...args) {
+        return args.map((arg) => JSON.stringify(arg)).join(" ");
+      }
+    
+      globalThis.console = {
+        log: (...args) => {
+          return argsToMessage(...args)
         },
-        Err(err) => Err(err.to_string()),
-    }
+        error: (...args) => {
+         return argsToMessage(...args)
+        },
+      };
+    })(globalThis);"#
+            .to_string()
+            .into(),
+    );
+    let parsed_source =
+        crate::core::deno::parse_module(javascript).map_err(|err| err.to_string())?;
+
+    let mut top_level_expressions: Vec<Expr> = vec![];
+
+    parsed_source.module().body.iter().for_each(|item| {
+        if let deno_ast::swc::ast::ModuleItem::Stmt(stmt) = item {
+            match stmt {
+                deno_ast::swc::ast::Stmt::Expr(_) | deno_ast::swc::ast::Stmt::If(_) => {
+                    let start = stmt.span_lo().0 as usize - 1;
+                    let end = stmt.span_hi().0 as usize - 1;
+                    let code = &javascript[start..end];
+                    let lines = javascript[..end].lines().count();
+
+                    let parsed = crate::core::deno::parse_module(code);
+                    if parsed.is_err() {
+                        return;
+                    }
+                    let transpiled = crate::core::deno::transpile(parsed.unwrap());
+                    if transpiled.is_err() {
+                        return;
+                    }
+
+                    match crate::core::deno::execute_script(
+                        &mut runtime,
+                        transpiled.unwrap().into(),
+                    ) {
+                        Ok(evaluated) => top_level_expressions.push(Expr(
+                            lines,
+                            unescape::unescape(evaluated.to_string().as_str()).unwrap(),
+                        )),
+                        Err(err) => {
+                            println!("Error: {}", err);
+                        }
+                    }
+                }
+                _ => {
+                    let start = stmt.span_lo().0 as usize - 1;
+                    let end = stmt.span_hi().0 as usize - 1;
+                    let code = &javascript[start..end];
+
+                    let parsed = crate::core::deno::parse_module(code);
+                    if parsed.is_err() {
+                        return;
+                    }
+                    let transpiled = crate::core::deno::transpile(parsed.unwrap());
+                    if transpiled.is_err() {
+                        return;
+                    }
+
+                    match crate::core::deno::execute_script(
+                        &mut runtime,
+                        transpiled.unwrap().into(),
+                    ) {
+                        Ok(_) => {}
+                        Err(err) => {
+                            println!("Error: {} {}", err, code);
+                        }
+                    }
+                }
+            }
+        }
+    });
+
+    Ok(top_level_expressions)
 }
 
 #[tauri::command]

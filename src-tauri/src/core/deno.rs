@@ -1,29 +1,25 @@
-use anyhow::Error;
+use deno_ast::{Diagnostic, ParsedSource};
+use deno_core::{v8, FastString, JsRuntime};
 
-use deno_ast::ImportsNotUsedAsValues;
-
-use deno_core::v8;
-use deno_core::FastString;
-
-use deno_core::JsRuntime;
-
-pub fn transpile(source: &str) -> Result<String, Error> {
-    let parsed_module = deno_ast::parse_module(deno_ast::ParseParams {
-        specifier: "repl.ts".to_string(),
-        text_info: deno_ast::SourceTextInfo::from_string(source.to_string()),
+pub fn parse_module(module: &str) -> Result<ParsedSource, Diagnostic> {
+    deno_ast::parse_module(deno_ast::ParseParams {
+        specifier: "<anon>".to_string(),
+        text_info: deno_ast::SourceTextInfo::from_string(module.to_string()),
         media_type: deno_ast::MediaType::TypeScript,
-        capture_tokens: false,
+        capture_tokens: true,
         maybe_syntax: None,
-        scope_analysis: false,
-    })?;
-    let transpiled_src = parsed_module
+        scope_analysis: true,
+    })
+}
+
+pub fn transpile(parsed_module: ParsedSource) -> Result<String, anyhow::Error> {
+    let parsed = parsed_module
         .transpile(&deno_ast::EmitOptions {
             emit_metadata: false,
             source_map: false,
             inline_source_map: false,
             inline_sources: false,
-            imports_not_used_as_values: ImportsNotUsedAsValues::Preserve,
-            // JSX is not supported in the REPL
+            imports_not_used_as_values: deno_ast::ImportsNotUsedAsValues::Preserve,
             transform_jsx: false,
             jsx_automatic: false,
             jsx_development: false,
@@ -33,10 +29,13 @@ pub fn transpile(source: &str) -> Result<String, Error> {
             var_decl_imports: true,
         })?
         .text;
-    Ok(format!("'use strict'; void 0;\n{transpiled_src}"))
+    Ok(parsed)
 }
 
-pub fn eval(context: &mut JsRuntime, code: FastString) -> Result<serde_json::Value, String> {
+pub fn execute_script(
+    context: &mut JsRuntime,
+    code: FastString,
+) -> Result<serde_json::Value, String> {
     let res = context.execute_script("<anon>", code);
     match res {
         Ok(global) => {

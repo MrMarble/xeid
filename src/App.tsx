@@ -87,7 +87,7 @@ export default function App() {
             "\n".repeat(error[0].startLineNumber - 1) + error[0].message
           );
         } else if (typeof error === "string") {
-          setCompiled(error.replace(/\s*at.+/gm, ""));
+          setCompiled(error.replace(/\s+at.+/gm, ""));
         }
       }
     },

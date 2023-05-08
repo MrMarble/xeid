@@ -27,6 +27,7 @@ substring = "1.4.5"
 tauri-plugin-store = { git = "https://github.com/tauri-apps/plugins-workspace", branch = "dev" }
 window-shadows = { git = "https://github.com/tauri-apps/window-shadows", branch = "dev" }
 deno_lint = "0.45.0"
+tokio = "1.28.0"
 
 [features]
 # this feature is used for production builds or when `devPath` points to the filesystem

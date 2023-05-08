@@ -5,7 +5,6 @@ use tauri::Manager;
 
 mod cmds;
 mod core;
-mod deno;
 
 fn main() {
     tauri::Builder::default()
