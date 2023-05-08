@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import Editor from "./components/Editor.tsx";
+import { Editor } from "./components/UI/atoms";
 import { Panel, PanelGroup, PanelResizeHandle } from "react-resizable-panels";
 import { close_splashscreen, evaluate, isLintError, lint } from "./commands.ts";
 import { useDebounce, useStore } from "./hooks";
@@ -15,7 +15,7 @@ export default function App() {
   const [storedTabs, setStoredTabs] = useState<Array<ITab>>();
   const [activeTab, setActiveTab] = useState("");
   const { get, set } = useStore();
-  const editorRef = useRef<editor.IStandaloneCodeEditor>(null);
+  const editorRef = useRef<editor.IStandaloneCodeEditor | null>(null);
   const monacoRef = useRef<Monaco | null>(null);
   const updateState = (value: string | undefined) => {
     setState(value ?? "");
@@ -121,28 +121,25 @@ export default function App() {
         )}
       </TitleBar>
       <PanelGroup autoSaveId="layout" direction="horizontal">
-        <Panel defaultSize={60} className="pt-3">
+        <Panel defaultSize={60}>
           <Editor
             key="editor"
             onChange={updateState}
             value={state}
-            language="typescript"
             path={activeTab + ".ts"}
-            ref={editorRef}
-            onMount={(editor, monaco) => {
+            onMount={(editor) => {
               editor.focus();
-              monacoRef.current = monaco;
             }}
+            ref={editorRef}
           />
         </Panel>
         <PanelResizeHandle className="flex w-2 justify-center">
           <div className="h-full w-px bg-border"></div>
         </PanelResizeHandle>
-        <Panel className="pt-3">
+        <Panel>
           <Editor
             key="output"
             value={compiled}
-            language="javascript"
             path={activeTab + ".compiled.ts"}
             readOnly
           />
