@@ -10,7 +10,7 @@ export default function TitleBar({ children }: { children: React.ReactNode }) {
         <img
           src="/32x32.png"
           className="flex h-8 w-8 object-contain"
-          alt="runts logo"
+          alt="XEID logo"
         />
       </div>
       {children}

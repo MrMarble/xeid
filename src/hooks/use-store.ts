@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { Store } from "tauri-plugin-store-api";
 
-const DEFAULT_STORE = "runts.dat";
+const DEFAULT_STORE = "xeid.dat";
 const store = new Store(DEFAULT_STORE);
 
 type storeKey = keyof StoreValue | ["code" | "compiled", ...string[]];

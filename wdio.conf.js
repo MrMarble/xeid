@@ -15,7 +15,7 @@ exports.config = {
       browserName: "webview2",
       maxInstances: 1,
       "tauri:options": {
-        application: "./src-tauri/target/release/runts.exe",
+        application: "./src-tauri/target/release/xeid.exe",
       },
     },
   ],
@@ -34,11 +34,11 @@ exports.config = {
     }),
   // ensure we are running `tauri-driver` before the session starts so that we can proxy the webdriver requests
   beforeSession: () =>
-    (tauriDriver = spawn(
-      path.resolve(os.homedir(), ".cargo", "bin", "tauri-driver"),
-      [],
-      { stdio: [null, process.stdout, process.stderr] }
-    )),
+  (tauriDriver = spawn(
+    path.resolve(os.homedir(), ".cargo", "bin", "tauri-driver"),
+    [],
+    { stdio: [null, process.stdout, process.stderr] }
+  )),
 
   // clean up the `tauri-driver` process we spawned at the start of the session
   afterSession: () => tauriDriver.kill(),

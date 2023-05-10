@@ -43,7 +43,8 @@ pub fn execute_script(
             let local = v8::Local::new(scope, global);
             // Deserialize a `v8` object into a Rust type using `serde_v8`,
             // in this case deserialize to a JSON `Value`.
-            let deserialized_value = serde_v8::from_v8::<serde_json::Value>(scope, local);
+            let deserialized_value =
+                deno_core::serde_v8::from_v8::<serde_json::Value>(scope, local);
 
             match deserialized_value {
                 Ok(value) => Ok(value),

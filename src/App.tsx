@@ -31,16 +31,16 @@ export default function App() {
         await set(
           ["code", tabs[0].id],
           `/*
-        * 👋 Bienvenido a RunTS 🚀
-        *
-        * Para comenzar, intente escribir algo de código
-        *
-        * Por ejemplo, aquí hay una función que devuelve una cadena:
-        */
-        const holaMundo = () => '¡Hola, Mundo! 🌎'
-        
-        // Cuando se llama a la función, el resultado se muestra a la derecha 👉
-        holaMundo()`
+* 👋 Welcome to XEID 🚀
+*
+* To get started, try writing some code
+*
+* For example, here is a function that returns a string:
+*/
+const helloWorld = () => 'Hello, World! 🌎'
+
+// When the function is called, the result is displayed to the right 👉
+helloWorld()`
         );
       }
       if (!activeTab) {

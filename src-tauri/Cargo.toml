@@ -1,28 +1,25 @@
 [package]
-name = "runts"
+name = "xeid"
 version = "0.0.0"
-description = "A Tauri App"
-authors = ["you"]
-license = ""
-repository = ""
+description = "eXecution Environment IDE"
+authors = ["Alvaro Tinoco"]
+license = "MIT"
+repository = "https://github.com/mrmarble/xeid"
 edition = "2021"
 
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [build-dependencies]
-tauri-build = { version = "1.2", features = [] }
+tauri-build = { version = "1.2.1", features = [] }
 
 [dependencies]
-tauri = { version = "1.2", features = ["shell-open", "window-close", "window-hide", "window-maximize", "window-minimize", "window-show", "window-start-dragging", "window-unmaximize", "window-unminimize"] }
+tauri = { version = "1.2.5", features = ["shell-open", "updater", "window-close", "window-hide", "window-maximize", "window-minimize", "window-show", "window-start-dragging", "window-unmaximize", "window-unminimize"] }
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
-deno_core = "0.181.0"
-serde_v8 = "0.92.0"
+deno_core = "0.185.0"
 deno_ast = { version = "0.26.0", features = ["transpiling"] }
 anyhow = "1.0.70"
 futures = "0.3.28"
 unescape = "0.1.0"
-swc_ecma_ast = "0.103.4"
 substring = "1.4.5"
 tauri-plugin-store = { git = "https://github.com/tauri-apps/plugins-workspace", branch = "dev" }
 window-shadows = { git = "https://github.com/tauri-apps/window-shadows", branch = "dev" }
