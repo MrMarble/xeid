@@ -30,5 +30,6 @@ export const Default: Story = {
     id: NIL,
     title: 'Tab 1',
     canClose: true,
+    active: false,
   }
 }

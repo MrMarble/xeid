@@ -25,13 +25,13 @@ export default function Tab({
   return (
     <div
       className={twMerge(
-        "group flex h-full w-44 cursor-pointer flex-nowrap items-center justify-between border-b border-l border-border bg-background px-2 pt-0.5 text-foreground transition-colors",
-        active && "-mb-0.5 border-b-0 pt-0",
+        "group flex h-full w-44 cursor-pointer flex-nowrap items-center justify-between border-b border-l border-border bg-background px-2 text-foreground transition-colors",
+        active && "border-b-0",
         !active && "hover:bg-border"
       )}
       onClick={onClick}
     >
-      <div className="flex h-full w-32 items-center overflow-hidden overflow-ellipsis whitespace-nowrap text-xs text-foreground">
+      <div className="flex h-5 w-32 items-center overflow-hidden overflow-ellipsis whitespace-nowrap text-xs text-foreground">
         <span className="mr-2 flex h-full items-center">❯</span>
         <EditableLabel text={title} onChange={onDoubleClick} />
       </div>
