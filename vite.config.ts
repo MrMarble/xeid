@@ -1,5 +1,6 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
+import path from "path";
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -23,9 +24,9 @@ export default defineConfig({
   logLevel: 'info',
   resolve: {
     alias: {
-      '@': '/src',
-      '@components': '/src/components',
-      '@hooks': '/src/hooks',
+      '@': path.resolve(__dirname, './src'),
+      '@components': path.resolve('./src/components/'),
+      '@hooks': path.resolve('./src/hooks/index.ts'),
     }
   }
 });
