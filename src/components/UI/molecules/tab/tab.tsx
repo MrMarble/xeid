@@ -1,4 +1,4 @@
-import { Button, EditableLabel, Icon } from "./index";
+import { Button, EditableLabel, Icon } from "@components/UI/atoms";
 import { twMerge } from "tailwind-merge";
 
 interface TabProps extends ITab {

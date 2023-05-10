@@ -21,4 +21,11 @@ export default defineConfig({
   base: './',
   root: './src',
   logLevel: 'info',
+  resolve: {
+    alias: {
+      '@': '/src',
+      '@components': '/src/components',
+      '@hooks': '/src/hooks',
+    }
+  }
 });

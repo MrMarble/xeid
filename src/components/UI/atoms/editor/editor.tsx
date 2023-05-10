@@ -1,10 +1,11 @@
 import MonacoEditor, {
-  type Monaco,
   type EditorProps as MonacoEditorProps,
+  type Monaco,
 } from "@monaco-editor/react";
-import { OneDark } from "../../../themes";
 import { type editor } from "monaco-editor";
 import { forwardRef } from "react";
+
+import { OneDark } from "../../../../themes";
 
 interface EditorProps
   extends Pick<MonacoEditorProps, "path" | "onChange" | "onMount" | "value"> {

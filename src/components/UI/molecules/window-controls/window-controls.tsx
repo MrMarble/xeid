@@ -1,6 +1,6 @@
-import { useEffect, useState } from "react";
+import { Button, Icon } from "@components/UI/atoms";
 import { appWindow } from "@tauri-apps/api/window";
-import { Button, Icon } from "../atoms";
+import { useEffect, useState } from "react";
 
 export default function WindowControls() {
   const [isMaximized, setIsMaximized] = useState(false);

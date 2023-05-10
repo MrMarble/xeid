@@ -1,7 +1,9 @@
+import { Button, Icon } from "@components/UI/atoms";
+import { Tab } from "@components/UI/molecules";
+import { useStore } from "@hooks";
 import { useEffect, useRef, useState } from "react";
-import { useStore } from "../../../hooks";
-import { Button, Icon, Tab } from "../atoms";
-import { type ITab } from "../atoms/tab.tsx";
+
+import { type ITab } from "../tab/tab.tsx";
 
 interface TabsProps {
   initialTabs?: Array<ITab>;

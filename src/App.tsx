@@ -1,13 +1,14 @@
-import { useEffect, useRef, useState } from "react";
-import { Editor } from "./components/UI/atoms";
-import { Panel, PanelGroup, PanelResizeHandle } from "react-resizable-panels";
-import { close_splashscreen, evaluate, isLintError, lint } from "./commands.ts";
-import { useDebounce, useStore } from "./hooks";
-import TitleBar from "./components/UI/organisms/title-bar.tsx";
-import Tabs from "./components/UI/molecules/tabs.tsx";
-import { ITab } from "./components/UI/atoms/tab.tsx";
+import { Tabs } from "@components/UI/molecules";
+import { TitleBar } from "@components/UI/organisms";
+import { useDebounce, useStore } from "@hooks";
 import type { Monaco } from "@monaco-editor/react/dist/index";
 import type { editor } from "monaco-editor";
+import { useEffect, useRef, useState } from "react";
+import { Panel, PanelGroup, PanelResizeHandle } from "react-resizable-panels";
+
+import { close_splashscreen, evaluate, isLintError, lint } from "./commands.ts";
+import { Editor } from "./components/UI/atoms";
+import { ITab } from "./components/UI/molecules/tab/tab.tsx";
 
 export default function App() {
   const [state, setState] = useState("");

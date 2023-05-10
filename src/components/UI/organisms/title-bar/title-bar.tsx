@@ -1,10 +1,10 @@
-import WindowControls from "../molecules/window-controls.tsx";
+import WindowControls from "../../molecules/window-controls/window-controls.tsx";
 
 export default function TitleBar({ children }: { children: React.ReactNode }) {
   return (
     <header
       data-tauri-drag-region
-      className="flex h-10 w-full select-none overflow-hidden bg-backgroundAlt"
+      className="flex h-10 w-full select-none overflow-hidden bg-backgroundAlt "
     >
       <div className="pointer-events-none flex h-full select-none items-center border-b border-border px-2">
         <img
