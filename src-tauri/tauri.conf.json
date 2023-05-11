@@ -53,7 +53,18 @@
           "type": "downloadBootstrapper"
         },
         "wix": {}
-      }
+      },
+      "appimage": {
+        "bundleMediaFramework": false
+      },
+      "macOS": {
+        "minimumSystemVersion": "10.13"
+      },
+      "deb": {
+        "files": {}
+      },
+      "copyright": "Copyright (c) 2023 Alvaro Tinoco",
+      "shortDescription": "eXecution Environment IDE"
     },
     "security": {
       "csp": null
@@ -65,7 +76,9 @@
       "windows": {
         "installMode": "passive"
       },
-      "endpoints": []
+      "endpoints": [
+        "https://github.com/mrmarble/xeid/releases/latest/download/latest.json"
+      ]
     },
     "windows": [
       {
