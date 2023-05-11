@@ -1,10 +1,13 @@
-# Tauri + React + Typescript
+<h1 align="center">XeID</h1>
 
-This template should help get you started developing with Tauri, React and
-Typescript in Vite.
+<h4 align="center">XeID is a desktop application that offers an interactive REPL environment for developers.</h4>
 
-## Recommended IDE Setup
+<p align="center">
+  <a href="https://opensource.org/licenses/MIT"><img src="https://img.shields.io/badge/license-MIT-_red.svg"></a>
+  <a href="https://github.com/mrmarble/xeid/releases/latest"><img src="https://img.shields.io/github/downloads/mrmarble/xeid/total"></a>
+  <a href="https://github.com/mrmarble/xeid/releases"><img src="https://img.shields.io/github/release/mrmarble/xeid"></a>
+</p>
 
-- [VS Code](https://code.visualstudio.com/) +
-  [Tauri](https://marketplace.visualstudio.com/items?itemName=tauri-apps.tauri-vscode) +
-  [rust-analyzer](https://marketplace.visualstudio.com/items?itemName=rust-lang.rust-analyzer)
+<center>
+  <img src="assets/screenshot.png" alt="xeid screenshot" width="600">
+</center>
