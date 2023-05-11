@@ -8,6 +8,6 @@
   <a href="https://github.com/mrmarble/xeid/releases"><img src="https://img.shields.io/github/release/mrmarble/xeid"></a>
 </p>
 
-<center>
+<h1 align="center">
   <img src="assets/screenshot.png" alt="xeid screenshot" width="600">
-</center>
+</h1>
