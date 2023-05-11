@@ -1,39 +1,32 @@
 import { Button, Icon } from "@components/UI/atoms";
 import { Tab } from "@components/UI/molecules";
-import { useStore } from "@hooks";
 import { useEffect, useRef, useState } from "react";
+import { v4 } from "uuid";
 
 import { type ITab } from "../tab/tab.tsx";
 
 interface TabsProps {
   initialTabs?: Array<ITab>;
   initialActiveTab?: string;
-  onChange?: (tabs: Array<ITab>, activeTab: string) => void;
-}
-
-function newID() {
-  return Date.now().toString(36) + Math.random().toString(36).substring(2);
+  onChange?: (activeTab: string) => void;
+  onNewTab?: (id: string) => void;
+  onTabClose?: (id: string) => void;
 }
 
 export default function Tabs({
   initialTabs,
   onChange,
+  onNewTab,
+  onTabClose,
   initialActiveTab,
 }: TabsProps) {
-  const [tabs, setTabs] = useState(initialTabs ?? [{ id: newID(), title: "" }]);
+  const [tabs, setTabs] = useState(initialTabs ?? [{ id: v4(), title: "" }]);
   const [activeTab, setActiveTab] = useState(
     initialActiveTab ?? (tabs?.[0]?.id || "")
   );
-  const { set } = useStore();
-
-  const updateState = async () => {
-    await set("tabs", tabs);
-    await set("activeTab", activeTab);
-  };
 
   useEffect(() => {
-    updateState();
-    onChange?.(tabs, activeTab);
+    onChange?.(activeTab);
     if (tabsRef.current) {
       tabsRef.current.scrollTo({
         left: tabsRef.current.scrollWidth,
@@ -96,9 +89,10 @@ export default function Tabs({
         <Button
           className="h-full px-2 py-0"
           onClick={() => {
-            const newTab = { id: newID(), title: "" };
+            const newTab = { id: v4(), title: "" };
             setTabs([...tabs, newTab]);
             setActiveTab(newTab.id);
+            onNewTab?.(newTab.id);
           }}
         >
           <Icon name="add" className="text-titlebar" />

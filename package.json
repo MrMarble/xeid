@@ -17,7 +17,8 @@
     "react-dom": "^18.2.0",
     "react-resizable-panels": "^0.0.42",
     "tauri-plugin-store-api": "github:tauri-apps/tauri-plugin-store",
-    "uuid": "^9.0.0"
+    "uuid": "^9.0.0",
+    "zustand": "^4.3.8"
   },
   "devDependencies": {
     "@storybook/addon-essentials": "7.0.10",
