@@ -9,7 +9,7 @@
   },
   "package": {
     "productName": "XEID",
-    "version": "0.0.0"
+    "version": "../package.json"
   },
   "tauri": {
     "allowlist": {
