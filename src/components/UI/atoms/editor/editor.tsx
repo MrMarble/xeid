@@ -66,6 +66,7 @@ const Editor = forwardRef<editor.IStandaloneCodeEditor, EditorProps>(
         onChange={onChange}
         theme={theme}
         path={path}
+        loading={<div></div>}
         value={value}
         options={{ ...defaultOptions, readOnly }}
         defaultLanguage="typescript"
