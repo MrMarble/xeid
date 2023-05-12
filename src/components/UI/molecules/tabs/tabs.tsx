@@ -1,43 +1,31 @@
 import { Button, Icon } from "@components/UI/atoms";
 import { Tab } from "@components/UI/molecules";
-import { useEffect, useRef, useState } from "react";
+import { fs } from "@tauri-apps/api";
+import { useEffect, useRef } from "react";
 import { v4 } from "uuid";
 
-import { type ITab } from "../tab/tab.tsx";
+import { useRunStore } from "@/store/store";
 
-interface TabsProps {
-  initialTabs?: Array<ITab>;
-  initialActiveTab?: string;
-  onChange?: (activeTab: string) => void;
-  onNewTab?: (id: string) => void;
-  onTabClose?: (id: string) => void;
-}
-
-export default function Tabs({
-  initialTabs,
-  onChange,
-  onNewTab,
-  onTabClose,
-  initialActiveTab,
-}: TabsProps) {
-  const [tabs, setTabs] = useState(initialTabs ?? [{ id: v4(), title: "" }]);
-  const [activeTab, setActiveTab] = useState(
-    initialActiveTab ?? (tabs?.[0]?.id || "")
-  );
+export default function Tabs() {
+  const tabsRef = useRef<HTMLDivElement>(null);
+  const { tabs, activeTab, addTab, setActiveTab, removeTab, renameTab } =
+    useRunStore((state) => ({
+      tabs: state.tabs,
+      activeTab: state.activeTab,
+      addTab: state.addTab,
+      setActiveTab: state.setActiveTab,
+      removeTab: state.removeTab,
+      renameTab: state.renameTab,
+    }));
 
   useEffect(() => {
-    onChange?.(activeTab);
     if (tabsRef.current) {
       tabsRef.current.scrollTo({
         left: tabsRef.current.scrollWidth,
         behavior: "smooth",
       });
     }
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tabs, activeTab]);
-
-  const tabsRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const tabsElement = tabsRef?.current;
@@ -69,15 +57,17 @@ export default function Tabs({
             setActiveTab(tab.id);
           }}
           onClose={() => {
-            const filteredTabs = tabs.filter(({ id }) => id !== tab.id);
-            setTabs(filteredTabs);
+            removeTab(tab.id);
             if (activeTab === tab.id) {
+              const filteredTabs = tabs.filter(({ id }) => id !== tab.id);
               setActiveTab(filteredTabs[index - 1]?.id ?? tabs?.[0]?.id);
             }
+            fs.removeFile(tab.id, { dir: fs.BaseDirectory.AppData }).catch(
+              console.error
+            );
           }}
           onDoubleClick={(title) => {
-            tab.title = title;
-            setTabs([...tabs]);
+            renameTab(tab.id, title);
           }}
           canClose={tabs.length > 1}
         />
@@ -89,10 +79,9 @@ export default function Tabs({
         <Button
           className="h-full px-2 py-0"
           onClick={() => {
-            const newTab = { id: v4(), title: "" };
-            setTabs([...tabs, newTab]);
-            setActiveTab(newTab.id);
-            onNewTab?.(newTab.id);
+            const newTab = v4();
+            addTab(newTab);
+            setActiveTab(newTab);
           }}
         >
           <Icon name="add" className="text-titlebar" />
