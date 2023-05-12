@@ -5,10 +5,12 @@
     "dev": "vite",
     "build": "tsc && vite build",
     "lint": "eslint src --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
-    "format": "prettier --write src/**/*.{ts,tsx,css,html,json,md}",
+    "format": "prettier --write src/**/*.{ts,tsx,css,html,json}",
     "wdio": "wdio run ./wdio.conf.js",
     "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build"
+    "build-storybook": "storybook build",
+    "tauri:dev": "tauri dev",
+    "tauri:build": "tauri build"
   },
   "dependencies": {
     "@monaco-editor/react": "^4.5.1",
