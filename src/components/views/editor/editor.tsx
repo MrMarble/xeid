@@ -1,27 +1,67 @@
+import type { Monaco } from "@monaco-editor/react";
+import { fs } from "@tauri-apps/api";
 import type { editor } from "monaco-editor";
 import { useCallback, useRef, useState } from "react";
 import { Panel, PanelGroup, PanelResizeHandle } from "react-resizable-panels";
+import { useUnmount, useUpdateEffect } from "react-use";
 
 import { evaluate } from "@/commands";
 import { Editor } from "@/components/UI/atoms";
 import { useDebounce } from "@/hooks";
 import { useRunStore } from "@/store/store";
 
-export default function EditorView() {
-  const editorRef = useRef<editor.IStandaloneCodeEditor | null>(null);
-  const [code, setCode] = useState("");
-  const [result, setResult] = useState("");
+interface Props {
+  onMount: () => void;
+}
 
-  const { activeTab } = useRunStore((state) => ({
-    activeTab: state.activeTab,
-  }));
+const saveCode = async (code: string | undefined, activeTab: string) => {
+  if (!code) return;
+  await fs.writeTextFile(activeTab, code, {
+    dir: fs.BaseDirectory.AppData,
+  });
+};
+
+const loadCode = async (activeTab: string) => {
+  const file = await fs.readTextFile(activeTab, {
+    dir: fs.BaseDirectory.AppData,
+  });
+
+  return file;
+};
+
+export default function EditorView({ onMount }: Props) {
+  const editorRef = useRef<editor.IStandaloneCodeEditor | null>(null);
+  const resultRef = useRef<editor.IStandaloneCodeEditor | null>(null);
+
+  const [code, setCode] = useState<string | undefined>();
+  const activeTab = useRunStore((state) => state.activeTab);
 
   const onChange = (value: string | undefined) => {
     setCode(value ?? "");
   };
 
-  const onMount = (editor: editor.IStandaloneCodeEditor) => {
+  const handleMount = (
+    editor: editor.IStandaloneCodeEditor,
+    monaco: Monaco
+  ) => {
     editor.focus();
+
+    loadCode(activeTab)
+      .then((code) => {
+        editor.setValue(code);
+      })
+      .catch(console.error)
+      .finally(onMount);
+
+    monaco.editor.onDidCreateModel(async (model) => {
+      if (model.uri.path.includes("compiled")) return;
+      try {
+        const code = await loadCode(model.uri.path.slice(1));
+        model.setValue(code);
+      } catch (error) {
+        console.error(error);
+      }
+    });
   };
 
   const callEvaluate = useCallback(async () => {
@@ -30,17 +70,29 @@ export default function EditorView() {
     }
 
     try {
+      await saveCode(code, activeTab);
       const evaluated = await evaluate(code);
-      setResult(evaluated);
+      resultRef.current?.setValue(evaluated);
     } catch (error) {
       console.error(error);
       if (typeof error === "string") {
-        setResult(error.replace(/\s+at.+/gm, ""));
+        resultRef.current?.setValue(error.replace(/\s+at.+/gm, ""));
       }
     }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [code]);
 
   useDebounce(callEvaluate, 300, [code]);
+
+  useUnmount(async () => {
+    await saveCode(code, activeTab);
+  });
+
+  useUpdateEffect(() => {
+    editorRef.current?.focus();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [activeTab]);
 
   return (
     <PanelGroup autoSaveId="layout" direction="horizontal">
@@ -48,9 +100,8 @@ export default function EditorView() {
         <Editor
           key="editor"
           onChange={onChange}
-          value={code}
           path={activeTab}
-          onMount={onMount}
+          onMount={handleMount}
           ref={editorRef}
         />
       </Panel>
@@ -60,8 +111,8 @@ export default function EditorView() {
       <Panel>
         <Editor
           key="output"
-          value={result}
           path={`${activeTab}/compiled`}
+          ref={resultRef}
           readOnly
         />
       </Panel>

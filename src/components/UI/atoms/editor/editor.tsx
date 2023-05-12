@@ -8,13 +8,27 @@ import { forwardRef } from "react";
 import { OneDark } from "../../../../themes";
 
 interface EditorProps
-  extends Pick<MonacoEditorProps, "path" | "onChange" | "onMount" | "value"> {
+  extends Pick<
+    MonacoEditorProps,
+    "path" | "onChange" | "onMount" | "value" | "defaultValue"
+  > {
   readOnly?: boolean;
   theme?: "OneDark" | "vs-dark" | "light";
 }
 
 const Editor = forwardRef<editor.IStandaloneCodeEditor, EditorProps>(
-  ({ readOnly, theme = "OneDark", path, onChange, onMount, value }, ref) => {
+  (
+    {
+      readOnly,
+      theme = "OneDark",
+      path,
+      onChange,
+      onMount,
+      value,
+      defaultValue,
+    },
+    ref
+  ) => {
     const onBeforeMount = (monaco: Monaco) => {
       monaco.editor.defineTheme("OneDark", OneDark);
     };
@@ -68,6 +82,7 @@ const Editor = forwardRef<editor.IStandaloneCodeEditor, EditorProps>(
         path={path}
         loading={<div></div>}
         value={value}
+        defaultValue={defaultValue}
         options={{ ...defaultOptions, readOnly }}
         defaultLanguage="typescript"
       />
