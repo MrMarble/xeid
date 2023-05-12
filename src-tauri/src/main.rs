@@ -7,6 +7,8 @@ mod cmds;
 mod core;
 
 fn main() {
+    let _ = fix_path_env::fix(); // macOS fix for PATH env variable
+
     tauri::Builder::default()
         .invoke_handler(tauri::generate_handler![
             cmds::evaluate,
