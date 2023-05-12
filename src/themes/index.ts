@@ -1,4 +1,4 @@
-import onedark from './onedark.json'
-import { editor } from 'monaco-editor'
+import onedark from "./onedark.json";
+import { editor } from "monaco-editor";
 
-export const OneDark = onedark as editor.IStandaloneThemeData
+export const OneDark = onedark as editor.IStandaloneThemeData;

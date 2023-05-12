@@ -1,23 +1,23 @@
-import type { Meta, StoryObj } from '@storybook/react';
-import { NIL } from 'uuid';
+import type { Meta, StoryObj } from "@storybook/react";
+import { NIL } from "uuid";
 
-import Tab from './tab';
+import Tab from "./tab";
 
 // More on how to set up stories at: https://storybook.js.org/docs/react/writing-stories/introduction
 const meta = {
-  title: 'Molecules/Tab',
+  title: "Molecules/Tab",
   component: Tab,
-  tags: ['autodocs'],
+  tags: ["autodocs"],
   argTypes: {
     onDoubleClick: {
-      action: 'double clicked'
+      action: "double clicked",
     },
     onClick: {
-      action: 'clicked'
+      action: "clicked",
     },
     onClose: {
-      action: 'closed'
-    }
+      action: "closed",
+    },
   },
 } satisfies Meta<typeof Tab>;
 
@@ -28,8 +28,8 @@ export default meta;
 export const Default: Story = {
   args: {
     id: NIL,
-    title: 'Tab 1',
+    title: "Tab 1",
     canClose: true,
     active: false,
-  }
-}
+  },
+};
